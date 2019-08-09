@@ -1,0 +1,43 @@
+clear;
+clc;
+ job =  [10,10,35;
+         15,8,50;
+         5,7,42;
+         10,5,60;
+         14,3,54;
+         12,9,69]
+len_job = length(job( :,1));
+job_sqnc = perms(1:len_job)
+total_proc_time = sum(job(:,1))
+mt = 7;
+proc_25 = 0.25*total_proc_time
+comp_time = [];
+ for k=1:length(job_sqnc(:,1))
+    n= job_sqnc(k,:);
+    p = zeros(1,length(n));
+        p(n(1)) = job(n(1),1);
+     for i = 2:length(n)
+       p(n(i))= p(n(i-1))+job(n(i),1);
+    
+   end
+comp_time = [comp_time;p];
+end
+disp(comp_time);
+x=[];
+y=[];
+for k=1:length(job_sqnc(:,1))
+    for i=1:length(job_sqnc(1,:))
+        
+    if comp_time(k,i) >= proc_25
+        x=[x,comp_time(k,i)+7];
+    end
+    end
+    y=[y;x];
+end   
+    
+
+% theta = max(0,comp_time - job(:,3)');
+% disp(theta)
+% ofv = theta*job(:,2);
+% [ofv_min,ofv_in] = min(ofv);
+% job_sqnc(ofv_in,:)
